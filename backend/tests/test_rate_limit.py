@@ -82,7 +82,7 @@ async def test_free_tier_rate_limit(test_client: AsyncClient, mock_redis):
     fake_pipeline = _make_fake_pipeline()
 
     with patch("app.api.v1.analyze.get_pipeline", return_value=fake_pipeline), \
-         patch("app.api.v1.analyze.get_redis", return_value=mock_redis):
+         patch("app.api.v1.analyze.get_redis", new=AsyncMock(return_value=mock_redis)):
 
         last_status = None
         for i in range(limit + 1):  # 0..20 inclusive = 21 requests
@@ -114,7 +114,7 @@ async def test_free_tier_exactly_at_limit_still_allowed(test_client: AsyncClient
     fake_pipeline = _make_fake_pipeline()
 
     with patch("app.api.v1.analyze.get_pipeline", return_value=fake_pipeline), \
-         patch("app.api.v1.analyze.get_redis", return_value=mock_redis):
+         patch("app.api.v1.analyze.get_redis", new=AsyncMock(return_value=mock_redis)):
 
         for i in range(limit):
             resp = await test_client.post(
@@ -146,7 +146,7 @@ async def test_pro_tier_no_rate_limit(
     fake_pipeline = _make_fake_pipeline()
 
     with patch("app.api.v1.analyze.get_pipeline", return_value=fake_pipeline), \
-         patch("app.api.v1.analyze.get_redis", return_value=mock_redis):
+         patch("app.api.v1.analyze.get_redis", new=AsyncMock(return_value=mock_redis)):
 
         for _ in range(5):
             resp = await test_client.post(
@@ -173,7 +173,7 @@ async def test_pro_tier_does_not_call_redis_incr(
     fake_pipeline = _make_fake_pipeline()
 
     with patch("app.api.v1.analyze.get_pipeline", return_value=fake_pipeline), \
-         patch("app.api.v1.analyze.get_redis", return_value=mock_redis):
+         patch("app.api.v1.analyze.get_redis", new=AsyncMock(return_value=mock_redis)):
 
         await test_client.post(
             "/api/v1/analyze",

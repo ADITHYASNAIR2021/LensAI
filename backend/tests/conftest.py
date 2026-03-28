@@ -169,8 +169,8 @@ async def test_client(mock_redis) -> AsyncGenerator[AsyncClient, None]:
     """
     app.dependency_overrides[get_db] = _override_get_db
 
-    with patch("app.core.redis_client.get_redis", return_value=mock_redis), \
-         patch("app.main.get_redis", return_value=mock_redis), \
+    with patch("app.core.redis_client.get_redis", new=AsyncMock(return_value=mock_redis)), \
+         patch("app.main.get_redis", new=AsyncMock(return_value=mock_redis)), \
          patch("app.main.close_redis", new_callable=AsyncMock), \
          patch("app.main.init_db", new_callable=AsyncMock), \
          patch("app.main.close_db", new_callable=AsyncMock):
@@ -188,10 +188,11 @@ async def test_client(mock_redis) -> AsyncGenerator[AsyncClient, None]:
 @pytest_asyncio.fixture
 async def sample_user(async_session: AsyncSession) -> User:
     """Create and persist a free-tier user in the test DB."""
+    uid = uuid.uuid4().hex[:8]
     user = User(
         id=str(uuid.uuid4()),
-        google_id="google_free_123",
-        email="free@example.com",
+        google_id=f"google_free_{uid}",
+        email=f"free_{uid}@example.com",
         name="Free User",
         avatar_url=None,
         tier=TierEnum.free,
@@ -208,10 +209,11 @@ async def sample_user(async_session: AsyncSession) -> User:
 @pytest_asyncio.fixture
 async def sample_pro_user(async_session: AsyncSession) -> User:
     """Create and persist a pro-tier user with an active Subscription."""
+    uid = uuid.uuid4().hex[:8]
     user = User(
         id=str(uuid.uuid4()),
-        google_id="google_pro_456",
-        email="pro@example.com",
+        google_id=f"google_pro_{uid}",
+        email=f"pro_{uid}@example.com",
         name="Pro User",
         avatar_url="https://example.com/avatar.png",
         tier=TierEnum.pro,

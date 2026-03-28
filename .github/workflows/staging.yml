@@ -53,9 +53,9 @@ jobs:
       REDIS_URL: redis://localhost:6379/0
       NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
       SECRET_KEY: ci-test-secret-key-not-for-production
-      ENVIRONMENT: test
+      ENVIRONMENT: testing
       DEBUG: "false"
-      ALLOWED_ORIGINS: "*"
+      ALLOWED_ORIGINS: '["*"]'
 
     steps:
       - uses: actions/checkout@v4
