@@ -140,9 +140,7 @@ async def _override_get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.commit()
         except Exception:
             await session.rollback()
-            # Do NOT re-raise — re-raising after athrow() causes
-            # "generator didn't stop after athrow()" in FastAPI's
-            # dependency cleanup when an HTTPException is thrown.
+            raise
 
 
 # ─── mock_redis fixture ───────────────────────────────────────────────────────

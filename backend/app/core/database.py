@@ -69,8 +69,7 @@ async def get_db_optional():
             await session.commit()
         except Exception:
             await session.rollback()
-            # Do NOT re-raise — avoids "generator didn't stop after athrow()"
-            # The HTTP response is already determined by this point.
+            raise
 
 
 async def init_db() -> None:
