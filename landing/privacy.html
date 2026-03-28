@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — LensAI</title>
+  <meta name="description" content="LensAI Privacy Policy — How we collect, use, and protect your data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #0d0f1a;
+      --bg2:    #12152a;
+      --bg3:    #181c35;
+      --accent: #6175f1;
+      --accent2:#a78bfa;
+      --text:   #f0f2ff;
+      --muted:  #8890b4;
+      --border: rgba(97, 117, 241, 0.18);
+      --glass:  rgba(24, 28, 53, 0.72);
+      --radius: 16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .gradient-text {
+      background: linear-gradient(135deg, #6175f1, #a78bfa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(13, 15, 26, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-logo-text { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 4px 20px rgba(97,117,241,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(97,117,241,0.5); }
+
+    /* Hero */
+    .page-hero {
+      padding: 80px 0 64px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(97,117,241,0.05), transparent);
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent2); }
+    .breadcrumb span { color: var(--muted); }
+    .page-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .page-hero p { color: var(--muted); font-size: 1rem; }
+    .page-hero .effective { margin-top: 16px; }
+    .effective-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(97,117,241,0.1);
+      border: 1px solid rgba(97,117,241,0.25);
+      color: var(--accent2);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    /* Layout */
+    .content-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 56px;
+      padding: 64px 0 100px;
+      align-items: start;
+    }
+
+    /* TOC */
+    .toc {
+      position: sticky;
+      top: 80px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .toc h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .toc ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .toc a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+    .toc a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border-left-color: var(--accent);
+    }
+
+    /* Article */
+    .article { max-width: 760px; }
+    .article section {
+      margin-bottom: 56px;
+      padding-bottom: 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .article section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .section-anchor { display: block; transform: translateY(-80px); visibility: hidden; }
+    .article h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-icon {
+      width: 36px; height: 36px;
+      background: rgba(97,117,241,0.12);
+      border: 1px solid rgba(97,117,241,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .article h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 24px 0 10px;
+      color: var(--text);
+    }
+    .article p {
+      color: #c8ceee;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+    .article ul {
+      color: #c8ceee;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin: 12px 0 14px 0;
+      padding-left: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .article ul li {
+      padding-left: 24px;
+      position: relative;
+    }
+    .article ul li::before {
+      content: '›';
+      position: absolute;
+      left: 6px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .article a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(167,139,250,0.3); transition: border-color 0.2s; }
+    .article a:hover { border-bottom-color: var(--accent2); }
+
+    /* Callout boxes */
+    .callout {
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      margin: 20px 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .callout-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-content { flex: 1; }
+    .callout-content strong { font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 4px; }
+    .callout-content p { font-size: 0.88rem; margin: 0; color: inherit; }
+    .callout-green { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
+    .callout-blue  { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); color: #7dd3fc; }
+    .callout-purple{ background: rgba(97,117,241,0.08); border: 1px solid rgba(97,117,241,0.2); color: var(--accent2); }
+    .callout-yellow{ background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); color: #fde68a; }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .contact-item { display: flex; flex-direction: column; gap: 4px; }
+    .contact-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+    .contact-value { font-size: 0.9rem; color: var(--accent2); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p { color: var(--muted); font-size: 0.85rem; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; border: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 900px) {
+      .content-layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+    @media (max-width: 640px) {
+      .contact-card { grid-template-columns: 1fr; }
+      .page-hero { padding: 56px 0 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🔍</div>
+        <span class="nav-logo-text">LensAI</span>
+      </a>
+      <a href="https://chrome.google.com/webstore/detail/lensai" target="_blank" rel="noopener" class="btn-primary">
+        Add to Chrome
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>›</span>
+      <span>Privacy Policy</span>
+    </div>
+    <h1>Privacy <span class="gradient-text">Policy</span></h1>
+    <p>We built LensAI with privacy as a core principle, not an afterthought.</p>
+    <div class="effective">
+      <span class="effective-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Effective date: March 15, 2026
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="content-layout">
+
+    <!-- Table of Contents -->
+    <aside>
+      <nav class="toc">
+        <h3>Contents</h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#information-we-collect">1. Information We Collect</a></li>
+          <li><a href="#how-we-use-it">2. How We Use It</a></li>
+          <li><a href="#data-storage">3. Data Storage &amp; Retention</a></li>
+          <li><a href="#sharing">4. Sharing &amp; Third Parties</a></li>
+          <li><a href="#security">5. Security</a></li>
+          <li><a href="#your-rights">6. Your Rights (GDPR/CCPA)</a></li>
+          <li><a href="#cookies">7. Cookies &amp; Tracking</a></li>
+          <li><a href="#children">8. Children's Privacy</a></li>
+          <li><a href="#changes">9. Changes to This Policy</a></li>
+          <li><a href="#contact">10. Contact Us</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <article class="article">
+
+      <section>
+        <span class="section-anchor" id="overview"></span>
+        <h2><span class="section-icon">🔍</span> Overview</h2>
+        <div class="callout callout-green">
+          <span class="callout-icon">✅</span>
+          <div class="callout-content">
+            <strong>The short version</strong>
+            <p>Images you analyze are sent to our AI API for processing and are never stored permanently. We do not sell your data. We never will.</p>
+          </div>
+        </div>
+        <p>This Privacy Policy describes how LensAI ("we," "us," or "our"), operated by Adithya S Nair, collects, uses, and protects information when you use the LensAI Chrome extension and associated services ("Service").</p>
+        <p>By installing or using LensAI, you agree to the practices described in this policy. If you do not agree, please uninstall the extension and discontinue use of the Service.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="information-we-collect"></span>
+        <h2><span class="section-icon">📋</span> 1. Information We Collect</h2>
+
+        <h3>1.1 Screen Captures (Images)</h3>
+        <p>When you use LensAI to analyze a screen region, the selected area is captured as an image. This image is:</p>
+        <ul>
+          <li>Transmitted over HTTPS to our processing API</li>
+          <li>Processed by our AI pipeline (NVIDIA NIM models)</li>
+          <li>Used solely to generate the AI response you requested</li>
+          <li><strong>Not stored permanently</strong> on our servers after your session ends</li>
+        </ul>
+        <div class="callout callout-blue">
+          <span class="callout-icon">💡</span>
+          <div class="callout-content">
+            <strong>Important</strong>
+            <p>You are responsible for ensuring you only capture regions you have the right to analyze. Do not capture content containing personal data of others, proprietary information you are not authorized to share, or confidential materials.</p>
+          </div>
+        </div>
+
+        <h3>1.2 Conversation History</h3>
+        <p>To enable follow-up questions within a session, LensAI maintains a short conversation history (last 3 turns / 6 messages). This history is stored locally in Chrome's extension storage (<code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:0.85rem;color:var(--accent2);">chrome.storage.local</code>) and is cleared when you close the side panel or start a new session. It is not synced to our servers except as part of the active API request.</p>
+
+        <h3>1.3 Knowledge Graph Data</h3>
+        <p>If you use the Personal Knowledge Graph feature, summaries and concept keywords extracted from your analyses are stored:</p>
+        <ul>
+          <li>Locally in your browser (Free plan)</li>
+          <li>In our encrypted database linked to your account (Pro/Team plans)</li>
+        </ul>
+        <p>This data is used exclusively to power your personal knowledge graph and is not used for any other purpose.</p>
+
+        <h3>1.4 Account Information (Pro/Team)</h3>
+        <p>If you create an account, we collect:</p>
+        <ul>
+          <li>Email address</li>
+          <li>Password (hashed using bcrypt, never stored in plaintext)</li>
+          <li>Subscription and billing status (payment processed by Stripe — we never see your card number)</li>
+          <li>Usage statistics (scan count, feature usage) for rate limiting and billing</li>
+        </ul>
+
+        <h3>1.5 Technical Logs</h3>
+        <p>We collect standard server logs, including:</p>
+        <ul>
+          <li>IP address (anonymized after 24 hours)</li>
+          <li>Request timestamps</li>
+          <li>Error logs (no image content, only status codes and metadata)</li>
+          <li>API response times for performance monitoring</li>
+        </ul>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="how-we-use-it"></span>
+        <h2><span class="section-icon">⚙️</span> 2. How We Use Your Information</h2>
+        <p>We use the information we collect exclusively to:</p>
+        <ul>
+          <li>Process your screen captures and generate AI-powered responses</li>
+          <li>Maintain your conversation history within a session for follow-up questions</li>
+          <li>Build and display your personal knowledge graph (if you use this feature)</li>
+          <li>Manage your account, subscription, and billing</li>
+          <li>Enforce rate limits to ensure fair usage</li>
+          <li>Improve the reliability and accuracy of the Service</li>
+          <li>Respond to your support requests</li>
+          <li>Send transactional emails (subscription confirmations, payment receipts)</li>
+        </ul>
+        <div class="callout callout-purple">
+          <span class="callout-icon">🚫</span>
+          <div class="callout-content">
+            <strong>What we never do</strong>
+            <p>We never use your screen captures or analysis content to train AI models. We never sell your data to third parties. We never use your data for behavioral advertising.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="data-storage"></span>
+        <h2><span class="section-icon">🗄️</span> 3. Data Storage &amp; Retention</h2>
+
+        <h3>3.1 Image Data</h3>
+        <p>Screen capture images are processed in-memory and are not written to persistent storage. They exist only for the duration of the API request (typically 1–3 seconds). Our Redis cache stores a SHA-256 hash of the image content (not the image itself) for up to 24 hours to power the smart caching feature.</p>
+
+        <h3>3.2 Knowledge Graph</h3>
+        <p>Knowledge graph nodes and connections are retained as long as your account is active. You can delete individual nodes or your entire knowledge graph at any time from the extension's Settings panel.</p>
+
+        <h3>3.3 Account Data</h3>
+        <p>Account information is retained for as long as your account is active. If you delete your account, all associated data is purged from our systems within 30 days, except where retention is required by law (e.g., financial records retained for 7 years per tax regulations).</p>
+
+        <h3>3.4 Log Data</h3>
+        <p>Server logs are retained for 30 days for security and debugging purposes. IP addresses in logs are anonymized after 24 hours.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="sharing"></span>
+        <h2><span class="section-icon">🤝</span> 4. Sharing &amp; Third Parties</h2>
+        <p>We share data with the following third parties, strictly limited to what is necessary to operate the Service:</p>
+
+        <h3>NVIDIA (AI Processing)</h3>
+        <p>Your screen captures and conversation context are sent to NVIDIA NIM for AI analysis processing. NVIDIA processes this data under their own <a href="https://www.nvidia.com/en-us/about-nvidia/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>. NVIDIA NIM API inputs are not used to train models.</p>
+
+        <h3>Stripe (Payment Processing)</h3>
+        <p>Pro and Team plan billing is processed by Stripe. We share your email address and subscription details with Stripe. We never handle or store your payment card information. Stripe's <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> governs their use of your data.</p>
+
+        <h3>Infrastructure Providers</h3>
+        <p>Our servers are hosted on cloud infrastructure (AWS/GCP). Data at rest is encrypted. These providers do not have access to the content of your analyses.</p>
+
+        <p>We do <strong>not</strong> share data with advertising networks, data brokers, analytics platforms, or any other third parties not listed above. We will never sell your personal data.</p>
+
+        <div class="callout callout-yellow">
+          <span class="callout-icon">⚖️</span>
+          <div class="callout-content">
+            <strong>Legal Disclosure</strong>
+            <p>We may disclose your information if required by law, court order, or to protect the safety, rights, or property of LensAI, our users, or the public. We will notify you of such requests where legally permitted.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="security"></span>
+        <h2><span class="section-icon">🔒</span> 5. Security</h2>
+        <p>We take security seriously and implement industry-standard safeguards:</p>
+        <ul>
+          <li>All data in transit is encrypted using TLS 1.3</li>
+          <li>All data at rest is encrypted using AES-256</li>
+          <li>API authentication uses JWT tokens with short expiry and refresh rotation</li>
+          <li>Passwords are hashed with bcrypt (work factor 12)</li>
+          <li>Rate limiting protects against abuse and brute-force attacks</li>
+          <li>Infrastructure is isolated with network-level access controls</li>
+          <li>Regular security audits and dependency vulnerability scanning</li>
+        </ul>
+        <p>No security system is impenetrable. If you discover a security vulnerability, please report it responsibly to <a href="mailto:security@lensai.app">security@lensai.app</a>. We commit to acknowledging reports within 48 hours.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="your-rights"></span>
+        <h2><span class="section-icon">⚖️</span> 6. Your Rights (GDPR / CCPA)</h2>
+        <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+
+        <h3>For all users</h3>
+        <ul>
+          <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
+          <li><strong>Deletion:</strong> Request deletion of your account and all associated data</li>
+          <li><strong>Portability:</strong> Export your knowledge graph data in JSON format</li>
+          <li><strong>Correction:</strong> Update inaccurate personal information in your account settings</li>
+        </ul>
+
+        <h3>EU / EEA users (GDPR)</h3>
+        <ul>
+          <li><strong>Right to object:</strong> Object to processing based on legitimate interests</li>
+          <li><strong>Restriction:</strong> Request that we restrict processing of your data</li>
+          <li><strong>Withdrawal of consent:</strong> Where processing is consent-based, withdraw consent at any time</li>
+          <li><strong>Lodge a complaint:</strong> File a complaint with your local supervisory authority</li>
+        </ul>
+
+        <h3>California users (CCPA)</h3>
+        <ul>
+          <li><strong>Know:</strong> The categories of personal information collected and how it's used</li>
+          <li><strong>Delete:</strong> Request deletion of personal information (subject to exceptions)</li>
+          <li><strong>Opt-out:</strong> We do not sell personal information — no opt-out required</li>
+          <li><strong>Non-discrimination:</strong> You will not receive discriminatory treatment for exercising your rights</li>
+        </ul>
+
+        <p>To exercise any of these rights, contact us at <a href="mailto:privacy@lensai.app">privacy@lensai.app</a>. We will respond within 30 days (GDPR) or 45 days (CCPA).</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="cookies"></span>
+        <h2><span class="section-icon">🍪</span> 7. Cookies &amp; Tracking</h2>
+        <p>The LensAI Chrome extension does not use cookies. The extension uses <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:0.85rem;color:var(--accent2);">chrome.storage.local</code> for local data persistence, which is not accessible to websites.</p>
+        <p>Our landing page (this website) uses minimal, strictly necessary cookies for session management and does not use any third-party tracking or advertising cookies. We do not use Google Analytics, Facebook Pixel, or similar tools.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="children"></span>
+        <h2><span class="section-icon">👶</span> 8. Children's Privacy</h2>
+        <p>LensAI is not directed at children under the age of 13 (or 16 in the EU). We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us at <a href="mailto:privacy@lensai.app">privacy@lensai.app</a> and we will delete that information promptly.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="changes"></span>
+        <h2><span class="section-icon">📝</span> 9. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. When we make material changes, we will:</p>
+        <ul>
+          <li>Update the "Effective date" at the top of this page</li>
+          <li>Display a notice in the LensAI extension side panel</li>
+          <li>Send an email notification to registered account holders</li>
+        </ul>
+        <p>Your continued use of LensAI after the effective date constitutes acceptance of the updated policy. If you disagree with changes, you may delete your account and uninstall the extension.</p>
+      </section>
+
+      <section>
+        <span class="section-anchor" id="contact"></span>
+        <h2><span class="section-icon">📬</span> 10. Contact Us</h2>
+        <p>For privacy questions, data requests, or concerns, please reach out to us:</p>
+        <div class="contact-card">
+          <div class="contact-item">
+            <span class="contact-label">Privacy inquiries</span>
+            <a href="mailto:privacy@lensai.app" class="contact-value">privacy@lensai.app</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">General contact</span>
+            <a href="mailto:hello@lensai.app" class="contact-value">hello@lensai.app</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Security reports</span>
+            <a href="mailto:security@lensai.app" class="contact-value">security@lensai.app</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Data controller</span>
+            <span class="contact-value" style="color:var(--text);">Adithya S Nair, LensAI</span>
+          </div>
+        </div>
+        <p style="margin-top:20px;">We aim to respond to all privacy-related inquiries within 5 business days.</p>
+      </section>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2026 LensAI by Adithya S Nair. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:hello@lensai.app">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

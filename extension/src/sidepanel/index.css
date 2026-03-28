@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #0d0e14;
+    color: #e5e7eb;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+  :root {
+    color-scheme: dark;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2b2d48; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3d43ca; }
+}
+
+@layer components {
+  .result-card {
+    @apply bg-surface-1 border border-surface-3 rounded-2xl p-4;
+  }
+
+  .badge {
+    @apply text-xs bg-surface-2 border border-surface-3 text-surface-4 px-2 py-0.5 rounded-md font-mono;
+  }
+  .badge-green {
+    @apply bg-green-950/40 border-green-800 text-green-400;
+  }
+
+  .btn-ghost {
+    @apply px-2.5 py-1.5 rounded-lg text-surface-4 hover:text-gray-200 hover:bg-surface-2 transition-colors;
+  }
+
+  .prose-dark {
+    @apply text-gray-200 text-sm leading-relaxed;
+  }
+  .prose-dark h1, .prose-dark h2, .prose-dark h3 {
+    @apply font-semibold text-white mt-4 mb-2;
+  }
+  .prose-dark h1 { @apply text-base; }
+  .prose-dark h2 { @apply text-sm; }
+  .prose-dark h3 { @apply text-sm text-lens-200; }
+  .prose-dark p { @apply mb-2; }
+  .prose-dark ul { @apply list-disc list-inside space-y-1 my-2; }
+  .prose-dark ol { @apply list-decimal list-inside space-y-1 my-2; }
+  .prose-dark li { @apply text-gray-300; }
+  .prose-dark a { @apply text-lens-300 hover:text-lens-200 underline; }
+  .prose-dark blockquote {
+    @apply border-l-2 border-lens-600 pl-3 my-2 text-surface-4 italic;
+  }
+  .prose-dark table {
+    @apply w-full border-collapse my-3 text-xs;
+  }
+  .prose-dark th {
+    @apply bg-surface-2 border border-surface-3 px-2 py-1.5 text-left font-semibold text-gray-200;
+  }
+  .prose-dark td {
+    @apply border border-surface-3 px-2 py-1.5 text-gray-300;
+  }
+  .prose-dark strong { @apply text-white font-semibold; }
+  .prose-dark em { @apply text-lens-200 italic; }
+  .prose-dark hr { @apply border-surface-3 my-3; }
+}
+
+/* Smooth page transitions */
+html { height: 100%; }
+#root { height: 100vh; display: flex; flex-direction: column; }

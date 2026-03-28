@@ -1,0 +1,150 @@
+version: '3.9'
+
+# Staging (pre-production) environment
+# Mirrors production but with lower resource limits, separate volumes,
+# and distinct container names so it can co-exist on the same server.
+
+networks:
+  lensai_staging_network:
+    driver: bridge
+    internal: false
+
+volumes:
+  staging_postgres_data:
+    driver: local
+  staging_redis_data:
+    driver: local
+  staging_letsencrypt:
+    driver: local
+
+services:
+  api:
+    image: ghcr.io/${GITHUB_REPOSITORY:-lensai/lensai}:${IMAGE_TAG:-staging}
+    container_name: lensai-staging-api
+    restart: always
+    env_file:
+      - .env.staging
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-lensai_staging}:${POSTGRES_PASSWORD}@staging-postgres:5432/${POSTGRES_DB:-lensai_staging}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@staging-redis:6379/0
+      ENVIRONMENT: staging
+      DEBUG: "false"
+      ALLOWED_ORIGINS: "chrome-extension://*"
+    depends_on:
+      staging-postgres:
+        condition: service_healthy
+      staging-redis:
+        condition: service_healthy
+    networks:
+      - lensai_staging_network
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512m      # Less than production — staging doesn't need as much
+          cpus: '0.5'
+        reservations:
+          memory: 256m
+          cpus: '0.1'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  staging-postgres:
+    image: postgres:16-alpine
+    container_name: lensai-staging-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lensai_staging}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-lensai_staging}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - staging_postgres_data:/var/lib/postgresql/data
+    networks:
+      - lensai_staging_network
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lensai_staging} -d ${POSTGRES_DB:-lensai_staging}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  staging-redis:
+    image: redis:7-alpine
+    container_name: lensai-staging-redis
+    restart: always
+    command: >
+      redis-server
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+      --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - staging_redis_data:/data
+    networks:
+      - lensai_staging_network
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 160m
+          cpus: '0.1'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  staging-nginx:
+    image: nginx:alpine
+    container_name: lensai-staging-nginx
+    restart: always
+    ports:
+      - "8080:80"    # Staging HTTP on a different port to avoid conflicting with prod
+      - "8443:443"   # Staging HTTPS on a different port
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - staging_letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - lensai_staging_network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"

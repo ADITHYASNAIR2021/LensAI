@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to LensAI Pro!</title>
+  <meta name="description" content="Your LensAI Pro subscription is active. Get started in minutes." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #0d0f1a;
+      --bg2:    #12152a;
+      --bg3:    #181c35;
+      --accent: #6175f1;
+      --accent2:#a78bfa;
+      --accent3:#38bdf8;
+      --green:  #4ade80;
+      --text:   #f0f2ff;
+      --muted:  #8890b4;
+      --border: rgba(97, 117, 241, 0.18);
+      --glass:  rgba(24, 28, 53, 0.72);
+      --radius: 16px;
+    }
+    html { scroll-behavior: smooth; height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .gradient-text {
+      background: linear-gradient(135deg, #6175f1, #a78bfa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-green {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── Navbar ─── */
+    nav {
+      background: rgba(13, 15, 26, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-logo-text { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .nav-badge {
+      background: linear-gradient(135deg, rgba(74,222,128,0.2), rgba(34,197,94,0.15));
+      border: 1px solid rgba(74,222,128,0.35);
+      color: #86efac;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ─── Main ─── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ─── Background orbs ─── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(97,117,241,0.12); top: -100px; left: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(74,222,128,0.08); bottom: -50px; right: -50px; }
+    .orb-3 { width: 300px; height: 300px; background: rgba(167,139,250,0.08); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+    /* ─── Confetti ─── */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      border-radius: 2px;
+      animation: confetti-fall linear infinite;
+      opacity: 0;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ─── Success card ─── */
+    .success-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 700px;
+      background: var(--glass);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      border-radius: 24px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 56px 48px;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(74,222,128,0.08),
+        0 40px 100px rgba(0,0,0,0.5),
+        0 0 80px rgba(74,222,128,0.04);
+    }
+
+    /* ─── Icon ─── */
+    .success-icon-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 32px;
+    }
+    .success-icon {
+      width: 96px; height: 96px;
+      background: linear-gradient(135deg, rgba(74,222,128,0.15), rgba(34,197,94,0.08));
+      border: 2px solid rgba(74,222,128,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      animation: icon-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes icon-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.25); }
+      50%       { box-shadow: 0 0 0 18px rgba(74,222,128,0); }
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(74,222,128,0.2);
+      animation: ring-pulse 2.5s ease-in-out infinite;
+    }
+    .ring-1 { inset: -14px; animation-delay: 0s; }
+    .ring-2 { inset: -28px; animation-delay: 0.4s; opacity: 0.6; }
+    @keyframes ring-pulse {
+      0%, 100% { transform: scale(0.96); opacity: 0.8; }
+      50%       { transform: scale(1.04); opacity: 0.3; }
+    }
+
+    /* ─── Typography ─── */
+    .success-card h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    /* ─── Pro badge ─── */
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(97,117,241,0.12), rgba(124,58,237,0.08));
+      border: 1px solid rgba(97,117,241,0.3);
+      border-radius: 14px;
+      padding: 12px 20px;
+      margin-bottom: 40px;
+    }
+    .badge-icon-wrap {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .badge-text { text-align: left; }
+    .badge-text strong { font-size: 0.92rem; font-weight: 700; display: block; }
+    .badge-text span { font-size: 0.78rem; color: var(--muted); }
+
+    /* ─── Steps ─── */
+    .steps-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 36px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      transition: all 0.25s ease;
+    }
+    .step-item:hover {
+      border-color: rgba(97,117,241,0.35);
+      background: rgba(97,117,241,0.04);
+      transform: translateX(4px);
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(97,117,241,0.3);
+      margin-top: 1px;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .step-desc  { color: var(--muted); font-size: 0.85rem; line-height: 1.55; }
+    .step-desc a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(167,139,250,0.3);
+      transition: border-color 0.2s;
+    }
+    .step-desc a:hover { border-bottom-color: var(--accent2); }
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-bottom: 2px solid rgba(97,117,241,0.4);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 0.77rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--accent2);
+      font-weight: 600;
+      white-space: nowrap;
+      margin: 0 1px;
+    }
+
+    /* ─── Buttons ─── */
+    .action-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6175f1, #7c3aed);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 28px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 4px 24px rgba(97,117,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(97,117,241,0.55); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 12px 26px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-secondary:hover { background: rgba(97,117,241,0.06); border-color: var(--accent); color: var(--accent2); }
+
+    /* ─── Features unlocked ─── */
+    .unlocked-section {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+    }
+    .unlocked-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .unlocked-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .unlocked-item {
+      background: rgba(74,222,128,0.04);
+      border: 1px solid rgba(74,222,128,0.12);
+      border-radius: 10px;
+      padding: 14px 12px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .unlocked-item:hover { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.22); }
+    .unlocked-emoji { font-size: 1rem; margin-bottom: 7px; display: block; }
+    .unlocked-name { font-size: 0.78rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .unlocked-sub  { font-size: 0.71rem; color: var(--muted); margin-top: 2px; }
+
+    /* ─── Help links ─── */
+    .help-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .help-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .help-links a:hover { color: var(--accent2); }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-inner p { color: var(--muted); font-size: 0.82rem; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 640px) {
+      .success-card { padding: 40px 24px; }
+      .unlocked-grid { grid-template-columns: repeat(2, 1fr); }
+      .action-row { flex-direction: column; }
+      .action-row a { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 380px) {
+      .unlocked-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navbar ─── -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🔍</div>
+        <span class="nav-logo-text">LensAI</span>
+      </a>
+      <span class="nav-badge">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        Pro Active
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Main ─── -->
+<main>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="success-card">
+
+    <!-- Icon -->
+    <div class="success-icon-wrapper">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="success-icon">🎉</div>
+    </div>
+
+    <!-- Heading -->
+    <h1>Welcome to <span class="gradient-text-green">LensAI Pro!</span></h1>
+    <p class="subtitle">
+      Your subscription is active and every Pro feature is unlocked.<br />
+      You're ready to understand anything, anywhere on the web.
+    </p>
+
+    <!-- Pro badge -->
+    <div class="pro-badge">
+      <div class="badge-icon-wrap">⚡</div>
+      <div class="badge-text">
+        <strong>LensAI Pro — Active</strong>
+        <span>Unlimited scans · NVIDIA NIM · All features unlocked</span>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <p class="steps-label">Get started in 3 steps</p>
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open Chrome and pin LensAI</div>
+          <div class="step-desc">
+            Click the puzzle-piece icon in your Chrome toolbar, find LensAI, and click the pin icon so it's always visible. Or jump straight to
+            <a href="chrome://extensions" target="_blank">chrome://extensions</a>.
+          </div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Sign in to activate your Pro account</div>
+          <div class="step-desc">
+            Click the LensAI icon to open the side panel, then sign in with the email address you used to subscribe. Your Pro features activate instantly — no restart needed.
+          </div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Press the shortcut and start analyzing</div>
+          <div class="step-desc">
+            On any webpage, press <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">L</span> to activate region selection. Drag a box around anything and choose your mode.<br /><br />
+            <strong style="color:var(--text);">Pro tip:</strong> Try <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">C</span> to compare two regions side by side — a Pro-exclusive feature.
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Action buttons -->
+    <div class="action-row">
+      <a href="https://chrome.google.com/webstore/detail/lensai" target="_blank" rel="noopener" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+        Open LensAI Extension
+      </a>
+      <a href="index.html" class="btn-secondary">
+        ← Back to Home
+      </a>
+    </div>
+
+    <!-- Unlocked features -->
+    <div class="unlocked-section">
+      <p class="unlocked-label">Everything you unlocked with Pro</p>
+      <div class="unlocked-grid">
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">♾️</span>
+          <div class="unlocked-name">Unlimited Scans</div>
+          <div class="unlocked-sub">No daily limit</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">🧠</span>
+          <div class="unlocked-name">NVIDIA NIM</div>
+          <div class="unlocked-sub">Priority AI model</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">🔀</span>
+          <div class="unlocked-name">Multi-Region Compare</div>
+          <div class="unlocked-sub">Ctrl+Shift+C</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">🌐</span>
+          <div class="unlocked-name">Full Knowledge Graph</div>
+          <div class="unlocked-sub">Unlimited nodes</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">📤</span>
+          <div class="unlocked-name">All Export Formats</div>
+          <div class="unlocked-sub">Notion · Obsidian · JSON</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">🔍</span>
+          <div class="unlocked-name">AI Reasoning Trace</div>
+          <div class="unlocked-sub">Step-by-step logic</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">📚</span>
+          <div class="unlocked-name">AI Learning Paths</div>
+          <div class="unlocked-sub">Personalized resources</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">💻</span>
+          <div class="unlocked-name">Code Execution Preview</div>
+          <div class="unlocked-sub">Safe sandbox output</div>
+        </div>
+        <div class="unlocked-item">
+          <span class="unlocked-emoji">⚡</span>
+          <div class="unlocked-name">Smart Caching</div>
+          <div class="unlocked-sub">~30–40% faster repeats</div>
+        </div>
+      </div>
+
+      <!-- Help links -->
+      <div class="help-links">
+        <a href="https://github.com/adithyanair/lensai/wiki" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Documentation
+        </a>
+        <a href="mailto:hello@lensai.app">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact Support
+        </a>
+        <a href="mailto:billing@lensai.app">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Billing Help
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <p>© 2026 LensAI by Adithya S Nair. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:hello@lensai.app">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Confetti burst on load
+  (function () {
+    const container = document.getElementById('particles');
+    const colors = ['#6175f1', '#a78bfa', '#38bdf8', '#4ade80', '#f472b6', '#fbbf24', '#fb923c'];
+    const count = 70;
+
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 5 + Math.random() * 7;
+      p.style.cssText = [
+        `left: ${Math.random() * 100}%`,
+        `top: -10px`,
+        `width: ${size}px`,
+        `height: ${size}px`,
+        `background: ${colors[Math.floor(Math.random() * colors.length)]}`,
+        `border-radius: ${Math.random() > 0.4 ? '50%' : '2px'}`,
+        `animation-duration: ${2.5 + Math.random() * 4}s`,
+        `animation-delay: ${Math.random() * 2}s`,
+        `opacity: 0`,
+      ].join(';');
+      container.appendChild(p);
+    }
+
+    // Remove particles after animation completes
+    setTimeout(() => { container.style.display = 'none'; }, 7000);
+  })();
+</script>
+
+</body>
+</html>

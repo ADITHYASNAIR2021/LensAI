@@ -1,0 +1,152 @@
+version: '3.9'
+
+networks:
+  lensai_network:
+    driver: bridge
+    internal: false
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  letsencrypt:
+    driver: local
+
+services:
+  api:
+    image: ghcr.io/${GITHUB_REPOSITORY:-lensai/lensai}:${IMAGE_TAG:-latest}
+    container_name: lensai-api
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-lensai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-lensai}
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: production
+      DEBUG: "false"
+      ALLOWED_ORIGINS: "chrome-extension://*"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - lensai_network
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: '1.0'
+        reservations:
+          memory: 512m
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: lensai-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lensai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-lensai}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - lensai_network
+    # No external port exposure — accessible only within lensai_network
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lensai} -d ${POSTGRES_DB:-lensai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: '0.5'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    container_name: lensai-redis
+    restart: always
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+      --appendonly yes
+      --appendfsync everysec
+      --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - lensai_network
+    # No external port exposure — accessible only within lensai_network
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 600m
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nginx:
+    image: nginx:alpine
+    container_name: lensai-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - /var/log/nginx:/var/log/nginx
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - lensai_network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"

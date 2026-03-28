@@ -1,0 +1,80 @@
+name: Extension — Build & Release
+
+# Triggered when you push a version tag (e.g. git tag v1.2.0 && git push --tags)
+# Creates a GitHub Release with the packaged extension zip ready for Chrome Web Store
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-release:
+    name: Build extension and create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Required to create releases
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+
+      - name: Install dependencies
+        working-directory: extension
+        run: npm ci
+
+      - name: TypeScript type-check
+        working-directory: extension
+        run: npx tsc --noEmit
+
+      - name: Build extension (production)
+        working-directory: extension
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: https://api.lensai.app
+
+      - name: Package extension as zip
+        run: |
+          VERSION="${{ github.ref_name }}"
+          ZIP_NAME="lensai-extension-${VERSION}.zip"
+          cd extension/dist
+          zip -r "../../${ZIP_NAME}" .
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
+          echo "Packaged ${ZIP_NAME}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          VERSION="${{ github.ref_name }}"
+          cat << EOF > release_notes.md
+          ## LensAI Chrome Extension ${VERSION}
+
+          ### Installation
+          1. Download \`${{ env.ZIP_NAME }}\` below
+          2. Unzip it to a local folder
+          3. Open Chrome → \`chrome://extensions\`
+          4. Enable **Developer mode** (top-right toggle)
+          5. Click **Load unpacked** → select the unzipped folder
+
+          ### Backend
+          This extension connects to \`https://api.lensai.app\`.
+          Self-hosters: rebuild with \`VITE_API_BASE_URL=https://your-api.example.com npm run build\`.
+
+          ### Changelog
+          See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "LensAI ${{ github.ref_name }}"
+          body_path: release_notes.md
+          files: ${{ env.ZIP_NAME }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}   # v1.0.0-beta → prerelease
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,14 @@
+/* LensAI content styles — injected into every page */
+/* Styles are scoped to #lensai-* to avoid conflicts */
+
+#lensai-overlay,
+#lensai-selection-box,
+#lensai-instruction,
+.lensai-crosshair-label,
+.lensai-translation-overlay,
+.lensai-proactive-hint,
+.lensai-comparison-divider {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  box-sizing: border-box !important;
+  line-height: 1.5 !important;
+}

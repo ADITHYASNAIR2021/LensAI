@@ -1,0 +1,114 @@
+"""
+LensAI Backend — FastAPI Application
+"""
+
+import time
+import structlog
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from .core.config import get_settings
+from .core.redis_client import get_redis, close_redis
+from .api.v1 import analyze, auth, history, knowledge, share, export, learning
+
+settings = get_settings()
+logger = structlog.get_logger()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info('LensAI starting up', version=settings.app_version, env=settings.environment)
+    redis = await get_redis()
+    await redis.ping()
+    logger.info('Redis connected')
+    yield
+    # Shutdown
+    await close_redis()
+    logger.info('LensAI shut down')
+
+
+app = FastAPI(
+    title='LensAI API',
+    version=settings.app_version,
+    description='See More. Understand Everything. — AI-powered visual understanding for the browser.',
+    docs_url='/docs' if settings.debug else None,
+    redoc_url='/redoc' if settings.debug else None,
+    lifespan=lifespan,
+)
+
+# ── CORS ─────────────────────────────────────────────────────────────────────
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+
+# ── Request Logging ───────────────────────────────────────────────────────────
+
+@app.middleware('http')
+async def log_requests(request: Request, call_next):
+    start = time.monotonic()
+    response = await call_next(request)
+    duration = round((time.monotonic() - start) * 1000)
+    logger.info(
+        'request',
+        method=request.method,
+        path=request.url.path,
+        status=response.status_code,
+        duration_ms=duration,
+    )
+    return response
+
+# ── Error Handler ─────────────────────────────────────────────────────────────
+
+@app.exception_handler(Exception)
+async def global_error_handler(request: Request, exc: Exception):
+    logger.error('unhandled_error', path=request.url.path, error=str(exc))
+    return JSONResponse(
+        status_code=500,
+        content={'detail': 'Internal server error. Please try again.'},
+    )
+
+# ── Routes ────────────────────────────────────────────────────────────────────
+
+app.include_router(auth.router,     prefix='/api/v1/auth',     tags=['Auth'])
+app.include_router(analyze.router,  prefix='/api/v1/analyze',  tags=['Analysis'])
+app.include_router(history.router,  prefix='/api/v1/history',  tags=['History'])
+app.include_router(knowledge.router,prefix='/api/v1/knowledge',tags=['Knowledge Graph'])
+app.include_router(share.router,    prefix='/api/v1/share',    tags=['Sharing'])
+app.include_router(export.router,   prefix='/api/v1/export',   tags=['Export'])
+app.include_router(learning.router, prefix='/api/v1/learning', tags=['Learning Paths'])
+
+# ── Health ────────────────────────────────────────────────────────────────────
+
+@app.get('/health')
+async def health():
+    redis = await get_redis()
+    redis_ok = False
+    try:
+        await redis.ping()
+        redis_ok = True
+    except Exception:
+        pass
+
+    return {
+        'status': 'healthy' if redis_ok else 'degraded',
+        'version': settings.app_version,
+        'redis': redis_ok,
+    }
+
+
+@app.get('/')
+async def root():
+    return {
+        'name': 'LensAI API',
+        'version': settings.app_version,
+        'docs': '/docs',
+    }

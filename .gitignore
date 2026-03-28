@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+
+# Node / Extension
+node_modules/
+extension/dist/
+extension/.vite/
+*.local
+
+# Alembic (keep versions but not pycache)
+alembic/versions/__pycache__/
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets — NEVER commit these
+.env
+.env.local
+.env.production
+.env.staging
+backend/.env
+extension/.env
+extension/.env.*
+*.pem
+*.key
+
+# Landing (built files)
+landing/node_modules/
+landing/.next/
+landing/out/
+
+# Agent / Claude artifacts
+.agent/
+.claude/
+skills-lock.json
+.superpowers/

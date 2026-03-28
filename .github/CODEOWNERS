@@ -1,0 +1,20 @@
+# CODEOWNERS — Defines required reviewers for pull requests
+#
+# These rules apply to PRs targeting main and staging branches.
+# GitHub enforces these reviews when branch protection is enabled.
+#
+# Format: <pattern> @<owner> [@<owner2> ...]
+
+# Default: all files require review from the repo owner
+*                           @adithyanraj03
+
+# Backend — require review for all Python + migration changes
+backend/**                  @adithyanraj03
+backend/alembic/versions/** @adithyanraj03
+
+# CI/CD workflows — always require owner review before merging
+.github/workflows/**        @adithyanraj03
+
+# Infrastructure
+nginx/**                    @adithyanraj03
+docker-compose*.yml         @adithyanraj03

@@ -1,0 +1,36 @@
+# Core
+fastapi==0.111.0
+aiosqlite==0.20.0
+uvicorn[standard]==0.30.1
+pydantic==2.7.4
+pydantic-settings==2.3.4
+python-multipart==0.0.9
+
+# Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+httpx==0.27.0
+
+# Database
+sqlalchemy[asyncio]==2.0.31
+asyncpg==0.29.0
+alembic==1.13.2
+
+# Redis
+redis[hiredis]==5.0.7
+
+# Payments
+stripe==10.5.0
+
+# Monitoring
+sentry-sdk[fastapi]==2.8.0
+structlog==24.2.0
+
+# Utilities
+python-dotenv==1.0.1
+pillow==10.4.0
+tenacity==8.4.2
+aiofiles==23.2.1
+pgvector==0.3.6
+weasyprint==62.3
+jinja2==3.1.4
