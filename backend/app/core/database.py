@@ -58,15 +58,19 @@ async def get_db() -> AsyncSession:
 async def get_db_optional():
     """FastAPI dependency — yields a DB session or None if DB is unavailable."""
     try:
-        async with AsyncSessionLocal() as session:
-            try:
-                yield session
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
+        session = AsyncSessionLocal()
     except Exception:
         yield None
+        return
+
+    async with session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            # Do NOT re-raise — avoids "generator didn't stop after athrow()"
+            # The HTTP response is already determined by this point.
 
 
 async def init_db() -> None:

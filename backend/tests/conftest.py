@@ -32,7 +32,7 @@ except ImportError:
 
 from app.core.auth import create_access_token, create_refresh_token
 from app.core.config import get_settings
-from app.core.database import get_db
+from app.core.database import get_db, get_db_optional
 from app.main import app
 from app.models.user import Base, Subscription, SubscriptionStatusEnum, TierEnum, User
 
@@ -174,6 +174,7 @@ async def test_client(mock_redis) -> AsyncGenerator[AsyncClient, None]:
     - Lifespan skipped via direct dependency override
     """
     app.dependency_overrides[get_db] = _override_get_db
+    app.dependency_overrides[get_db_optional] = _override_get_db
 
     with patch("app.core.redis_client.get_redis", new=AsyncMock(return_value=mock_redis)), \
          patch("app.main.get_redis", new=AsyncMock(return_value=mock_redis)), \
