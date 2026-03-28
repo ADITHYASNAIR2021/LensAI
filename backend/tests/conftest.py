@@ -19,7 +19,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import String, Text, event
+from sqlalchemy import BigInteger, Integer, String, Text, event
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
@@ -69,6 +69,10 @@ def _patch_pg_types_for_sqlite(target, connection, **kw):
                     col.type = _SQLiteUUID()
                 elif PgVector is not None and isinstance(col.type, PgVector):
                     col.type = Text()
+                elif isinstance(col.type, BigInteger) and col.primary_key:
+                    # SQLite only auto-increments INTEGER PRIMARY KEY,
+                    # not BIGINT PRIMARY KEY.
+                    col.type = Integer()
 
             # Remove PostgreSQL-only indexes (GIN, HNSW, etc.)
             pg_only = [
@@ -136,7 +140,9 @@ async def _override_get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.commit()
         except Exception:
             await session.rollback()
-            raise
+            # Do NOT re-raise — re-raising after athrow() causes
+            # "generator didn't stop after athrow()" in FastAPI's
+            # dependency cleanup when an HTTPException is thrown.
 
 
 # ─── mock_redis fixture ───────────────────────────────────────────────────────
@@ -217,7 +223,7 @@ async def sample_pro_user(async_session: AsyncSession) -> User:
         name="Pro User",
         avatar_url="https://example.com/avatar.png",
         tier=TierEnum.pro,
-        stripe_customer_id="cus_test_pro",
+        stripe_customer_id=f"cus_test_pro_{uid}",
         is_active=True,
     )
     async_session.add(user)
@@ -226,8 +232,8 @@ async def sample_pro_user(async_session: AsyncSession) -> User:
     sub = Subscription(
         id=str(uuid.uuid4()),
         user_id=user.id,
-        stripe_subscription_id="sub_test_pro",
-        stripe_price_id="price_test_pro_monthly",
+        stripe_subscription_id=f"sub_test_pro_{uid}",
+        stripe_price_id=f"price_test_pro_{uid}",
         status=SubscriptionStatusEnum.active,
         tier=TierEnum.pro,
         cancel_at_period_end=False,
