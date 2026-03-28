@@ -4,8 +4,8 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ARRAY, DateTime, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import DateTime, JSON, String, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
@@ -20,8 +20,8 @@ class ConversationSession(Base):
     user_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), nullable=True, index=True
     )
-    messages: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
-    scan_ids: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
+    messages: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    scan_ids: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     expires_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

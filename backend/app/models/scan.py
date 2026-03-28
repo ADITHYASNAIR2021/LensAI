@@ -6,17 +6,17 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import (
-    ARRAY,
     Boolean,
     DateTime,
     Enum,
     Index,
     Integer,
+    JSON,
     String,
     Text,
     func,
 )
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
@@ -66,13 +66,13 @@ class ScanRecord(Base):
     )
     image_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     result_text: Mapped[str] = mapped_column(Text, nullable=False, default="")
-    key_points: Mapped[list | None] = mapped_column(JSONB, nullable=True)
-    specialized_analysis: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
-    reasoning_trace: Mapped[list | None] = mapped_column(JSONB, nullable=True)
+    key_points: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    specialized_analysis: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    reasoning_trace: Mapped[list | None] = mapped_column(JSON, nullable=True)
     page_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
     page_title: Mapped[str | None] = mapped_column(String(512), nullable=True)
     page_domain: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    tags: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
+    tags: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     starred: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -89,6 +89,5 @@ class ScanRecord(Base):
     )
 
     __table_args__ = (
-        Index("ix_scan_records_tags", "tags", postgresql_using="gin"),
         Index("ix_scan_records_user_created", "user_id", "created_at"),
     )

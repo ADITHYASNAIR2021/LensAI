@@ -19,11 +19,16 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import String, event
+from sqlalchemy import String, Text, event
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.types import TypeDecorator
+
+try:
+    from pgvector.sqlalchemy import Vector as PgVector
+except ImportError:
+    PgVector = None
 
 from app.core.auth import create_access_token, create_refresh_token
 from app.core.config import get_settings
@@ -52,16 +57,28 @@ class _SQLiteUUID(TypeDecorator):
 
 
 @event.listens_for(Base.metadata, "before_create")
-def _patch_pg_uuid_for_sqlite(target, connection, **kw):
+def _patch_pg_types_for_sqlite(target, connection, **kw):
     """
-    Before DDL is emitted, replace PostgreSQL UUID columns with the
-    SQLite-compatible string type so CREATE TABLE succeeds.
+    Before DDL is emitted, replace PostgreSQL-only column types with
+    SQLite-compatible alternatives so CREATE TABLE succeeds.
     """
     if connection.dialect.name == "sqlite":
         for table in target.tables.values():
             for col in table.columns:
                 if isinstance(col.type, PG_UUID):
                     col.type = _SQLiteUUID()
+                elif PgVector is not None and isinstance(col.type, PgVector):
+                    col.type = Text()
+
+            # Remove PostgreSQL-only indexes (GIN, HNSW, etc.)
+            pg_only = [
+                idx for idx in list(table.indexes)
+                if idx.kwargs.get("postgresql_using") or any(
+                    k.startswith("postgresql_") for k in idx.kwargs
+                )
+            ]
+            for idx in pg_only:
+                table.indexes.discard(idx)
 
 
 # ─── In-memory SQLite engine ─────────────────────────────────────────────────

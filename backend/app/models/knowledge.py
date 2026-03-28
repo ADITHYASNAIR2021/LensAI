@@ -7,12 +7,12 @@ from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
-    ARRAY,
     DateTime,
     Enum,
     Float,
     ForeignKey,
     Index,
+    JSON,
     String,
     func,
 )
@@ -47,7 +47,7 @@ class KnowledgeNode(Base):
     title: Mapped[str] = mapped_column(String(256), nullable=False)
     summary: Mapped[str] = mapped_column(String(512), nullable=False, default="")
     domain: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    tags: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
+    tags: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     embedding: Mapped[list[float]] = mapped_column(Vector(1024), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
